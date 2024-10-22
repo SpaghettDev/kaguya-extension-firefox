@@ -1,8 +1,8 @@
 import "../../../assets/js/modulepreload-polyfill.0c213636.js";
 import {
     d as Ld,
-    a as Dd,
-    m as zd,
+    AnimeServices,
+    MangaServices,
 } from "../../../assets/js/index.8404c945.js";
 function Td(e, t) {
     for (var n = 0; n < t.length; n++) {
@@ -3520,7 +3520,7 @@ const Aa = ({ name: e, quality: t, languages: n, id: r, logo: l }) =>
                     }),
                     $("div", {
                         className: "grid grid-cols-3 gap-4 mb-4",
-                        children: Object.entries(Dd).map(([e, t]) =>
+                        children: Object.entries(AnimeServices).map(([e, t]) =>
                             $(
                                 Aa,
                                 {
@@ -3540,7 +3540,7 @@ const Aa = ({ name: e, quality: t, languages: n, id: r, logo: l }) =>
                     }),
                     $("div", {
                         className: "grid grid-cols-3 gap-4",
-                        children: Object.entries(zd).map(([e, t]) =>
+                        children: Object.entries(MangaServices).map(([e, t]) =>
                             $(
                                 Aa,
                                 {

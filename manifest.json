@@ -49,5 +49,5 @@
         "webRequestBlocking",
         "<all_urls>"
     ],
-    "content_security_policy": "default-src 'self'; img-src *; connect-src ws://localhost:8081/ http://* https://* data: blob: filesystem:;"
+    "content_security_policy": "default-src 'self'; script-src 'self' 'unsafe-eval'; img-src *; connect-src ws://localhost:8081/ http://* https://* data: blob: filesystem:;"
 }
