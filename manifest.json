@@ -34,7 +34,7 @@
     "browser_action": {},
     "devtools_page": "src/pages/devtools/index.html",
     "web_accessible_resources": [
-        "_website/547-e48cce8e6a7eeb96.js",
+        "website/547-e48cce8e6a7eeb96.js",
         "assets/js/*.js",
         "assets/css/*.css",
         "icon16.png",

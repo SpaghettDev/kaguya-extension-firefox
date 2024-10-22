@@ -14,7 +14,7 @@ browser.webRequest.onBeforeRequest.addListener(
             console.log(`Overwriting incorrect js (${r.url}) to local`);
 
             return {
-                redirectUrl: browser.runtime.getURL("_website/547-e48cce8e6a7eeb96.js")
+                redirectUrl: browser.runtime.getURL("website/547-e48cce8e6a7eeb96.js")
             };
         }
     },
