@@ -46,8 +46,6 @@ function pushListener(e, t) {
 }
 
 const registerListener = () => {
-    console.log("Registering global listener");
-
     browser.runtime.onMessage.addListener(
         (event, sender, sendResponse) => (
             (async () => {
@@ -144,7 +142,6 @@ const I = (e) => {
     updateRules = (e) => {
         const t = T;
         for (const r of (e == null ? void 0 : e.rules) || []) t.push(r);
-        console.log("updating rules", t)
         return AddRule(t);
     },
     getAnimeService = async (e) => (e in AnimeServices ? AnimeServices[e] : null),

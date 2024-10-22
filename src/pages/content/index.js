@@ -1,8 +1,6 @@
 window.addEventListener(
     "message",
     (event) => {
-        console.log(`Intermediary received event with origin ${event.origin}`);
-
         if (event.source != window) return;
         if (event.data?.type === "extensionResponse") return;
         if (event.origin !== "https://kaguya.app") return;
