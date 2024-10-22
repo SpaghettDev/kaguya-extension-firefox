@@ -12,6 +12,6 @@ Tested on Firefox Nightly 133.0a1 (2024-10-21).
 To install the extension:
 
 1. Install the source code as a zip file
-2. Go to [about:debugging](about:debugging#/runtime/this-firefox)
+2. Go to [about:debugging#/runtime/this-firefox](about:debugging#/runtime/this-firefox)
 3. Click on "Add Temporary Add-on..."
 4. Select the installed zip file
