@@ -1,4 +1,8 @@
 {
     "tabWidth": 4,
-    "useTabs": false
+    "useTabs": false,
+    "singleQuote": false,
+    "trailingComma": "es5",
+    "arrowParens": "always",
+    "endOfLine": "auto"
 }

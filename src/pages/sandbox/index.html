@@ -1,11 +1,11 @@
 <html>
-  <body>
-    <script>
-      window.addEventListener("message", (event) => {
-        const data = eval(event.data);
+    <body>
+        <script>
+            window.addEventListener("message", (event) => {
+                const data = eval(event.data);
 
-        event.source.postMessage(data, event.origin);
-      });
-    </script>
-  </body>
+                event.source.postMessage(data, event.origin);
+            });
+        </script>
+    </body>
 </html>

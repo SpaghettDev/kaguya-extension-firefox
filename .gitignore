@@ -1,2 +1,12 @@
 # web-ext stuff
 /web-ext-artifacts
+
+# node stuff
+/node_modules
+/package-lock.json
+
+# typescript stuff
+/dist
+
+# misc
+/.env
