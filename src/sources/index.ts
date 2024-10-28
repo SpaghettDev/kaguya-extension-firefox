@@ -36,7 +36,7 @@ export const anime = {
     zoro: new Zoro(),
     // vuighe: new VuiGhe(),
     // aniwave: new AniWave(),
-    // animepahe: new AnimePahe(),
+    animepahe: new AnimePahe(),
     // crunchyroll: new Crunchyroll(),
     aniplay: new Aniplay(),
     hhhay: new HHHay(),

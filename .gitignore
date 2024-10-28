@@ -8,5 +8,8 @@
 # typescript stuff
 /dist
 
+# vite stuff
+/public
+
 # misc
 /.env

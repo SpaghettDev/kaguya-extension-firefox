@@ -2,10 +2,109 @@ import AnimeSource from "@src/core/AnimeSource";
 import Episode, { EpisodeType } from "@src/core/Episode";
 import SearchResult, { SearchResultType } from "@src/core/SearchResult";
 import VideoContainer, { VideoContainerType } from "@src/core/VideoContainer";
+import { VideoFormat, VideoType } from "@src/core/Video";
 import VideoServer, { VideoServerType } from "@src/core/VideoServer";
 import { DataWithExtra } from "@src/types/utils";
 import { parseBetween } from "@src/utils";
 import { load } from "cheerio";
+
+enum PaheAnimeType {
+    TV = "TV",
+    SPECIAL = "Special",
+    MOVIE = "Movie",
+    OVA = "OVA",
+    ONA = "ONA",
+    MUSIC = "Music",
+};
+
+enum PaheSeason {
+    FALL = "Fall",
+    WINTER = "Winter",
+    SPRING = "Spring",
+    SUMMER = "Summer",
+};
+
+enum PaheAnimeStatus {
+    FINISHED = "Finished Airing",
+    AIRING = "Currently Airing",
+    NOT_YET_AIRED = "Not yet aired",
+};
+
+enum PaheAudioType {
+    ENGLISH = "eng",
+    JAPAN = "jpn"
+};
+
+enum PaheDiscType {
+    UNKNOWN = "",
+    BD = "BD",
+    DVD = "DVD"
+};
+
+/**
+ * Interface for the episode type
+ * returned by the /search endpoint
+ */
+interface PaheApiSearchEpisode {
+    id: number;
+    title: string;
+    type: PaheAnimeType;
+    episodes: number;
+    status: PaheAnimeStatus;
+    season: PaheSeason;
+    year: number;
+    score: number | null; // float
+    poster: string;
+    session: string;
+};
+
+/**
+ * Interface for the episode type
+ * returned by the /release endpoint
+ */
+interface PaheApiReleaseEpisode {
+    id: number;
+    anime_id: number;
+    episode: number;
+    episode2: number;
+    eidition: string;
+    title: string;
+    snapshot: string;
+    disc: PaheDiscType;
+    audio: PaheAudioType;
+    duration: string;
+    session: string;
+    filler: number;
+    created_at: string;
+};
+
+/**
+ * Interface for the /search endpoint
+ */
+interface PaheAPISearchResponse {
+    total: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+    from: number;
+    to: Number;
+    data: PaheApiSearchEpisode[];
+};
+
+/**
+ * Interface for the /release endpoint
+ */
+interface PaheAPIReleaseResponse {
+    total: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+    next_page_url: string | null;
+    prev_page_url: string | null;
+    from: number;
+    to: Number;
+    data: PaheApiReleaseEpisode[];
+};
 
 export default class AnimePahe extends AnimeSource {
     constructor() {
@@ -72,7 +171,7 @@ export default class AnimePahe extends AnimeSource {
     async search(query: string): Promise<SearchResultType[]> {
         const encodedQuery = encodeURIComponent(query);
 
-        const response = await fetch(
+        const response: PaheAPISearchResponse = await fetch(
             `${this.url}/api?m=search&q=${encodedQuery}`
         ).then((res) => res.json());
 
@@ -80,7 +179,7 @@ export default class AnimePahe extends AnimeSource {
 
         const searchResults = response.data.map((item) => {
             return SearchResult({
-                id: item.id,
+                id: item.id.toString(),
                 thumbnail: item.poster,
                 title: item.title,
             });
@@ -122,10 +221,10 @@ export default class AnimePahe extends AnimeSource {
     }
 
     async loadAllEpisodes(animeSession: string) {
-        const episodes = [];
+        const episodes: PaheApiReleaseEpisode[] = [];
 
         const load = async (page: number = 1) => {
-            const episodeResponse = await fetch(
+            const episodeResponse: PaheAPIReleaseResponse = await fetch(
                 `${this.url}/api?m=release&id=${animeSession}&sort=episode_asc&page=${page}`
             ).then((res) => res.json());
 
@@ -170,10 +269,10 @@ export default class AnimePahe extends AnimeSource {
     async loadVideoContainer(
         videoServer: VideoServerType
     ): Promise<VideoContainerType> {
-        const response = await fetch(videoServer.embed).then((res) =>
-            res.text()
-        );
-
+        const response = await fetch(videoServer.embed, {
+            headers: { "Referer": "https://animepahe.ru/" }
+        }).then((res) => res.text());
+        
         const packedString =
             "eval(function(p,a,c,k,e,d)" +
             parseBetween(
@@ -181,18 +280,31 @@ export default class AnimePahe extends AnimeSource {
                 "<script>eval(function(p,a,c,k,e,d)",
                 "</script>"
             );
-
         const unpacked = unpack(packedString) as string;
 
-        const stream = parseBetween(unpacked, "'const source=\\'", "\\'");
+        const stream = unpacked.match(/https.*?m3u8/g)?.[0];
+
+        if (!stream) return null;
+        
+        const video: VideoType = { file: { url: stream }};
+        
+        const streamData = videoServer.name.match(
+            /^(.+?)\s*·\s*(\d+p)\s*\(([\d.]+MB)\)(?: (\S+))?$/
+        );
+        if (streamData) {
+            const [_, serverName, res, size] = streamData;
+
+            video.format = VideoFormat.CONTAINER;
+            video.quality = res;
+        }
 
         return VideoContainer({
-            videos: [{ file: { url: stream } }],
+            videos: [video]
         });
     }
 }
 
-function unpack(source: string) {
+function unpack(source: string): string {
     /* Unpacks P.A.C.K.E.R. packed js code. */
     let { payload, symtab, radix, count } = _filterargs(source);
 
@@ -201,6 +313,7 @@ function unpack(source: string) {
     }
 
     let unbase: Unbaser;
+
     try {
         unbase = new Unbaser(radix);
     } catch (e) {
@@ -211,12 +324,14 @@ function unpack(source: string) {
         /* Look up symbols in the synthetic symtab. */
         const word = match;
         let word2: string;
+
         if (radix == 1) {
             //throw Error("symtab unknown");
             word2 = symtab[parseInt(word)];
         } else {
             word2 = symtab[unbase.unbase(word)];
         }
+
         return word2 || word;
     }
 
@@ -252,6 +367,7 @@ function unpack(source: string) {
                 }
             }
         }
+
         throw Error(
             "Could not make sense of p.a.c.k.e.r data (unexpected code structure)"
         );
