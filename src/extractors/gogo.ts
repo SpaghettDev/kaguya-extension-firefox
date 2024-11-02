@@ -87,9 +87,9 @@ const gogoExtractor = async (id: string) => {
                     },
                 }
             );
-            
+
             const fetchRes = await fetchResponse.json();
-            
+
             const res = decryptEncryptAjaxResponse(fetchRes);
 
             if (!res.source) return { error: "No source found" };

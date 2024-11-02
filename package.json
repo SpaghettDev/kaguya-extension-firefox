@@ -20,7 +20,7 @@
     "type": "module",
     "dependencies": {
         "cheerio": "^1.0.0-rc.12",
-        "crypto-js": "^4.1.1",
+        "crypto-js": "^4.2.0",
         "event-target-shim": "^6.0.2",
         "huge-uploader": "^1.0.6",
         "jszip-cli": "^1.4.24",
@@ -32,7 +32,7 @@
     "devDependencies": {
         "@ffflorian/jszip-cli": "^3.4.1",
         "@rollup/plugin-typescript": "^8.5.0",
-        "@types/crypto-js": "^4.1.1",
+        "@types/crypto-js": "^4.2.2",
         "@types/dom-parser": "^0.1.1",
         "@types/firefox": "0.0.34",
         "@types/firefox-webext-browser": "^120.0.4",
