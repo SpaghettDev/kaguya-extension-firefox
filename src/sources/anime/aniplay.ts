@@ -5,39 +5,10 @@ import { VideoFormat } from "@src/core/Video";
 import { VideoContainerType } from "@src/core/VideoContainer";
 import { VideoServerType } from "@src/core/VideoServer";
 import { DataWithExtra } from "@src/types/utils";
+import { AniPlayInfoProvider, AniPlaySource } from "@models/anime/aniplay";
 
 const HEADER_NEXT_ACTION_INFO = "f3422af67c84852f5e63d50e1f51718f1c0225c4";
 const HEADER_NEXT_ACTION_WATCH = "5dbcd21c7c276c4d15f8de29d9ef27aef5ea4a5e";
-
-type AniPlayQualityType = "360p"
-    | "480p"
-    | "720p"
-    | "1080p"
-    | "default"
-    | "backup";
-
-interface AniPlayEpisode {
-    id: string;
-    number: number;
-    title: string;
-    hasDub: boolean;
-    isFiller: boolean;
-    img: string;
-    description: string;
-    createdAt: string;
-};
-
-interface AniPlayInfoProvider {
-    episodes: AniPlayEpisode[];
-    providerId: string;
-    default?: boolean;
-};
-
-interface AniPlaySource {
-    url: string;
-    isM3U8: boolean;
-    quality: AniPlayQualityType;
-};
 
 export default class Aniplay extends AnimeSource {
     constructor() {

@@ -6,6 +6,12 @@ import VideoContainer, { VideoContainerType } from "@src/core/VideoContainer";
 import { VideoServerType } from "@src/core/VideoServer";
 import { DataWithExtra } from "@src/types/utils";
 import { parseBetween } from "@src/utils";
+import {
+    SudatchiEpisodeSubtitle,
+    SudatchiProps, SudatchiStreamsProps,
+    SudatchiStreamsResponse,
+    SudathchiSearchResponse, 
+} from "@models/anime/sudatchi";
 
 export default class Sudatchi extends AnimeSource {
     constructor() {
@@ -84,82 +90,17 @@ export default class Sudatchi extends AnimeSource {
     }
 
     async search(query: string): Promise<SearchResultType[]> {
-        if (!query) return [];
+        if (!query || query === "null") return [];
 
-        if (query === "null") return [];
+        const response: SudathchiSearchResponse = await fetch(
+            `${this.url}/api/directory?title=${encodeURIComponent(query)}`
+        ).then((res) => res.json());
 
-        const encodedQuery = encodeURIComponent(query);
+        console.log(`search '${query} (${encodeURIComponent(query)})' responded with`, response);
 
-        const response = await fetch(
-            `${this.url}/api/directory?page=1&genres=&years=&types=&status=&title=${encodedQuery}&category=`
-        );
+        if (!response?.animes?.length) return [];
 
-        const data = (await response.json()) as {
-            animes: Array<{
-                id: number;
-                anilistId: number;
-                titleRomanji: string;
-                titleEnglish: string;
-                titleJapanese: string;
-                titleSpanish: any;
-                titleFilipino: any;
-                titleHindi: any;
-                titleKorean: any;
-                synonym: string;
-                synopsis: string;
-                slug: string;
-                statusId: number;
-                typeId: number;
-                year: number;
-                seasonId: number;
-                totalEpisodes: number;
-                seasonNumber: any;
-                imgUrl: string;
-                imgBanner: string;
-                trailerLink: string;
-                animeCrunchyId: string;
-                crunchyrollId: string;
-                hidiveId: any;
-                seasonHidiveId: any;
-                initialAirDate: string;
-                isAdult: boolean;
-                prequelId: any;
-                sequelId: any;
-                Type: {
-                    id: number;
-                    name: string;
-                };
-                Status: {
-                    id: number;
-                    name: string;
-                };
-            }>;
-            page: number;
-            pages: number;
-            genres: Array<{
-                id: number;
-                name: string;
-            }>;
-            years: Array<{
-                year: number;
-            }>;
-            types: Array<{
-                id: number;
-                name: string;
-            }>;
-            status: Array<{
-                id: number;
-                name: string;
-            }>;
-            selectedGenres: Array<any>;
-            selectedYears: Array<any>;
-            selectedTypes: Array<any>;
-            selectedStatus: Array<any>;
-        };
-
-        if (!data?.animes?.length) return [];
-
-        return data.animes.map((anime) => ({
+        return response.animes.map((anime) => ({
             id: anime.slug,
             title:
                 anime.titleEnglish || anime.titleRomanji || anime.titleJapanese,
@@ -203,111 +144,11 @@ export default class Sudatchi extends AnimeSource {
 
         if (!props) return [];
 
-        const data = JSON.parse(props) as {
-            props: {
-                pageProps: {
-                    animeData: {
-                        id: number;
-                        anilistId: number;
-                        titleRomanji: string;
-                        titleEnglish: string;
-                        titleJapanese: string;
-                        titleSpanish: any;
-                        titleFilipino: any;
-                        titleHindi: any;
-                        titleKorean: any;
-                        synonym: string;
-                        synopsis: string;
-                        slug: string;
-                        statusId: number;
-                        typeId: number;
-                        year: number;
-                        seasonId: number;
-                        totalEpisodes: string;
-                        seasonNumber: any;
-                        imgUrl: string;
-                        imgBanner: string;
-                        trailerLink: string;
-                        animeCrunchyId: string;
-                        crunchyrollId: string;
-                        hidiveId: any;
-                        seasonHidiveId: any;
-                        initialAirDate: string;
-                        isAdult: boolean;
-                        prequelId: any;
-                        sequelId: any;
-                        Status: {
-                            id: number;
-                            name: string;
-                        };
-                        Type: {
-                            id: number;
-                            name: string;
-                        };
-                        Season: {
-                            id: number;
-                            name: string;
-                        };
-                        characters: Array<{
-                            id: number;
-                            anilistId: number;
-                            name: string;
-                            role: string;
-                            imageUrl: string;
-                            animeId: number;
-                            voiceActors: Array<{
-                                id: number;
-                                characterId: number;
-                                voiceActorId: number;
-                                voiceActor: {
-                                    id: number;
-                                    anilistId: number;
-                                    name: string;
-                                    language: string;
-                                    imageUrl: string;
-                                };
-                            }>;
-                        }>;
-                        AnimeGenres: Array<{
-                            animeId: number;
-                            genreId: number;
-                            Genre: {
-                                id: number;
-                                name: string;
-                            };
-                        }>;
-                        Episodes: Array<{
-                            id: number;
-                            title: string;
-                            number: number;
-                            imgUrl: string;
-                            animeId: number;
-                            isProcessed: boolean;
-                            openingStartsAt: number;
-                            openingEndsAt: number;
-                            _count: {
-                                Subtitles: number;
-                                AudioStreams: number;
-                            };
-                            releaseDate: any;
-                            subtitleCount: number;
-                            audioCount: number;
-                        }>;
-                        nextAirSchedule: {
-                            id: number;
-                            animeId: number;
-                            episodeId: any;
-                            episodeNumber: number;
-                            airDate: string;
-                        };
-                    };
-                };
-            };
-        };
+        const data: SudatchiProps = JSON.parse(props);
 
-        if (!data?.props?.pageProps?.animeData?.Episodes?.length) return [];
-
-        const episodes = data.props.pageProps.animeData.Episodes;
+        const episodes = data?.props?.pageProps?.animeData?.Episodes;
+        
+        if (!episodes) return [];
 
         return episodes.map((episode) => ({
             id: `${animeId}-${episode.id}`,
@@ -317,7 +158,7 @@ export default class Sudatchi extends AnimeSource {
                 animeId,
                 episodeId: episode.id.toString(),
             },
-        }));
+        }) as EpisodeType);
     }
 
     async loadVideoServers(
@@ -357,149 +198,36 @@ export default class Sudatchi extends AnimeSource {
             timestamps: [],
         });
 
-        const streamResponse = await fetch(
+        const streamResponse: SudatchiStreamsResponse = await fetch(
             `${this.url}/api/streams?episodeId=${episodeId}`
-        );
+        ).then((res) => res.json());
 
-        const json = (await streamResponse.json()) as { url: string };
-
-        if (!json?.url) return container;
+        if (!streamResponse?.url) return container;
 
         container.videos.push({
-            file: { url: `${this.url}/${json.url}` },
+            file: { url: `${this.url}/${streamResponse.url}` },
         });
 
-        const response = await fetch(`${this.url}/watch/${animeId}/${number}`);
-
-        const html = await response.text();
+        const response = await fetch(`${this.url}/watch/${animeId}/${number}`).then(
+            (res) => res.text()
+        );
 
         const props = parseBetween(
-            html,
+            response,
             '<script id="__NEXT_DATA__" type="application/json">',
             "</script>"
         );
 
         if (!props) return container;
 
-        const data = JSON.parse(props) as {
-            props: {
-                pageProps: {
-                    episodeData: {
-                        anime: {
-                            id: number;
-                            titleRomanji: string;
-                            titleEnglish: string;
-                            titleJapanese: string;
-                            synonym: string;
-                            synopsis: string;
-                            slug: string;
-                            year: number;
-                            isAdult: boolean;
-                            totalEpisodes: number;
-                            imgUrl: string;
-                            imgBanner: string;
-                            trailerLink: string;
-                            Type: {
-                                id: number;
-                                name: string;
-                            };
-                            Status: {
-                                id: number;
-                                name: string;
-                            };
-                            Season: {
-                                id: number;
-                                name: string;
-                            };
-                            AnimeGenres: Array<{
-                                Genre: {
-                                    id: number;
-                                    name: string;
-                                };
-                            }>;
-                        };
-                        currentEpisode: string;
-                        episode: {
-                            id: number;
-                            title: string;
-                            number: number;
-                            imgUrl: string;
-                            animeId: number;
-                            isProcessed: boolean;
-                            openingStartsAt: number;
-                            openingEndsAt: number;
-                            _count: {
-                                EpisodeViews: number;
-                            };
-                            AudioStreams: Array<{
-                                id: number;
-                                episodeId: number;
-                                languageId: number;
-                                isDefault: boolean;
-                                autoSelect: boolean;
-                                playlistUri: string;
-                            }>;
-                        };
-                        episodes: Array<{
-                            id: number;
-                            title: string;
-                            number: number;
-                            imgUrl: string;
-                            animeId: number;
-                            isProcessed: boolean;
-                            openingStartsAt: number;
-                            openingEndsAt: number;
-                            _count: {
-                                EpisodeViews: number;
-                            };
-                            AudioStreams: Array<{
-                                id: number;
-                                episodeId: number;
-                                languageId: number;
-                                isDefault: boolean;
-                                autoSelect: boolean;
-                                playlistUri: string;
-                            }>;
-                        }>;
-                        previousEpisode: any;
-                        nextEpisode: any;
-                        servers: Array<any>;
-                        subtitlesJson: string;
-                        subtitles: Array<{
-                            id: number;
-                            name: string;
-                            language: string;
-                        }>;
-                        subtitlesMap: {
-                            "1": string;
-                            "2": string;
-                            "4": string;
-                            "6": string;
-                        };
-                        comments: Array<any>;
-                        fonts: Array<string>;
-                    };
-                };
-            };
-        };
+        const data: SudatchiStreamsProps = JSON.parse(props);
 
         if (!data) return container;
 
-        const subtitles = JSON.parse(
+        const subtitles: SudatchiEpisodeSubtitle[] = JSON.parse(
             data?.props?.pageProps?.episodeData?.subtitlesJson
-        ) as Array<{
-            id: number;
-            episodeId: number;
-            subtitleId: number;
-            url: string;
-            SubtitlesName: {
-                id: number;
-                name: string;
-                language: string;
-            };
-        }>;
-
-        // const fonts = data?.props?.pageProps?.episodeData?.fonts;
+        );
+        const fonts = data?.props?.pageProps?.episodeData?.fonts;
 
         if (subtitles?.length) {
             const subtitleUrl = await this.getSubtitleUrl();
@@ -536,62 +264,16 @@ export default class Sudatchi extends AnimeSource {
             ];
         }
 
-        // Can't manage to make this work with Jassub
-        // if (fonts?.length) {
-        //   container.fonts = fonts.map((font) => {
-        //     const fontName = font.split("/").pop().split(".")[0];
+        if (fonts?.length) {
+          container.fonts = fonts.map((font) => {
+            const fontName = font.split("/").at(-1).split(".")[0];
 
-        //     return {
-        //       file: { url: `${this.url}${font}` },
-        //       name: fontName,
-        //     };
-        //   });
-        // }
-
-        container.fonts = [
-            {
-                file: {
-                    url: `https://github.com/justrajdeep/fonts/raw/master/Arial.ttf`,
-                },
-                name: "Arial",
-            },
-            {
-                file: {
-                    url: `https://github.com/justrajdeep/fonts/raw/master/Arial%20Bold.ttf`,
-                },
-                name: "Arial",
-            },
-            {
-                file: {
-                    url: "https://github.com/justrajdeep/fonts/raw/master/Times%20New%20Roman.ttf",
-                },
-                name: "Times New Roman",
-            },
-            {
-                file: {
-                    url: "https://github.com/justrajdeep/fonts/raw/master/Trebuchet%20MS.ttf",
-                },
-                name: "Trebuchet MS",
-            },
-            {
-                file: {
-                    url: "https://github.com/justrajdeep/fonts/raw/master/Tahoma.ttf",
-                },
-                name: "Tahoma",
-            },
-            {
-                file: {
-                    url: "https://github.com/hoangvu12/kaguya-fonts/raw/master/AdobeArabic-Regular.ttf",
-                },
-                name: "Adobe Arabic",
-            },
-            {
-                file: {
-                    url: "https://github.com/hoangvu12/kaguya-fonts/raw/master/Swiss%20721%20BT.ttf",
-                },
-                name: "Swis721 BT",
-            },
-        ];
+            return {
+                file: { url: `${this.url}${font}` },
+                name: fontName,
+            };
+          });
+        }
 
         return container;
     }
@@ -599,11 +281,8 @@ export default class Sudatchi extends AnimeSource {
     async getSubtitleUrl() {
         const response = await fetch(
             "https://raw.githubusercontent.com/hoangvu12/kext-domain/master/domains.json"
-        );
-        const json = (await response.json()) as { [key: string]: string };
+        ).then((res) => res.json()) as { [key: string]: string };
 
-        if (!json?.["sudatchi-sub"]) return "";
-
-        return json["sudatchi-sub"];
+        return response?.["sudatchi-sub"] ?? "";
     }
 }

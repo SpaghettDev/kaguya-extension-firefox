@@ -57,7 +57,9 @@ export const decryptSource = (encrypted: string, secret: string): string => {
     const content = cipherBuffer.subarray(16);
 
     const decrypted = CryptoJS.AES.decrypt(
-        { ciphertext: uint8ArrayToWordArray(content) },
+        {
+            ciphertext: uint8ArrayToWordArray(content),
+        } as CryptoJS.lib.CipherParams,
         uint8ArrayToWordArray(key),
         {
             iv: uint8ArrayToWordArray(iv),
@@ -82,6 +84,7 @@ const wordArrayToUint8Array = (wordArray: CryptoJS.lib.WordArray): Uint8Array =>
 
     for (let i = 0; i < len; i++) {
         word = wordArray.words[i];
+
         u8Array[offset++] = word >> 24;
         u8Array[offset++] = (word >> 16) & 0xff;
         u8Array[offset++] = (word >> 8) & 0xff;
@@ -92,7 +95,18 @@ const wordArrayToUint8Array = (wordArray: CryptoJS.lib.WordArray): Uint8Array =>
 };
 
 const uint8ArrayToWordArray = (u8Array: Uint8Array): CryptoJS.lib.WordArray => {
-    return CryptoJS.lib.WordArray.create(u8Array);
+    const words: number[] = [];
+
+    for (let i = 0; i < u8Array.length; i += 4) {
+        words.push(
+            (u8Array[i] << 24) |
+            (u8Array[i + 1] << 16) |
+            (u8Array[i + 2] << 8) |
+            (u8Array[i + 3])
+        );
+    }
+
+    return CryptoJS.lib.WordArray.create(words, u8Array.length);
 };
 
 const matchingKey = (variableName: string, text: string): string => {

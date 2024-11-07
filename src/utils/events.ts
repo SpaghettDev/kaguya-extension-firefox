@@ -119,7 +119,7 @@ export function onMessage(
     };
 }
 
-export const registerListener = async () => {
+export const registerListener = () => {
     browser.runtime.onMessage.addListener((event, _, sendResponse) => {
         (async () => {
             try {

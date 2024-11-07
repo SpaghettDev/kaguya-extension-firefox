@@ -377,7 +377,8 @@ browser.tabs.onRemoved.addListener(async function (tabId) {
 
 queryAndSaveTabs();
 
-// Listener (communication between web page and firefox extension)
+// Intermediate (communication between web page and firefox extension)
 registerMessageIntermediate();
+// Listener (communication between intermediate and firefox extension)
 registerListener();
 initializeListeners();

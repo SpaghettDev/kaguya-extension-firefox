@@ -11,6 +11,7 @@ import manifest from "./manifest";
 const rootDir = resolve(__dirname);
 const srcDir = resolve(rootDir, "src");
 const pagesDir = resolve(srcDir, "pages");
+const modelsDir = resolve(srcDir, "models");
 const assetsDir = resolve(srcDir, "assets");
 const outDir = resolve(rootDir, "dist");
 const publicDir = resolve(rootDir, "public");
@@ -27,6 +28,7 @@ export default defineConfig({
             "@src": srcDir,
             "@assets": assetsDir,
             "@pages": pagesDir,
+            "@models": modelsDir,
         },
     },
     plugins: [
