@@ -302,7 +302,7 @@ const registerMessageIntermediate = () => {
         (details) => {
             if (details.url === targetJSURL) {
                 console.log(`Overwriting website js (${details.url})`);
-    
+
                 return {
                     redirectUrl: browser.runtime.getURL("website-overrides/547-e48cce8e6a7eeb96.js")
                 };

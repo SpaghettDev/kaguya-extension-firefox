@@ -96,8 +96,6 @@ export default class Sudatchi extends AnimeSource {
             `${this.url}/api/directory?title=${encodeURIComponent(query)}`
         ).then((res) => res.json());
 
-        console.log(`search '${query} (${encodeURIComponent(query)})' responded with`, response);
-
         if (!response?.animes?.length) return [];
 
         return response.animes.map((anime) => ({
@@ -147,7 +145,7 @@ export default class Sudatchi extends AnimeSource {
         const data: SudatchiProps = JSON.parse(props);
 
         const episodes = data?.props?.pageProps?.animeData?.Episodes;
-        
+
         if (!episodes) return [];
 
         return episodes.map((episode) => ({

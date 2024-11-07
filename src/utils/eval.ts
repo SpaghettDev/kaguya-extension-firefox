@@ -9,7 +9,7 @@ export const evalScript = async <T extends unknown>(
             active: false
         });
         offscreenTabId = offscreenTab.id;
-        
+
         browser.tabs.hide(offscreenTabId);
     }
 

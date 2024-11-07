@@ -95,7 +95,7 @@ const gogoExtractor = async (id: string) => {
             if (!res.source) return { error: "No source found" };
 
             res.source.forEach((source) => sources.push(source));
-            res.source_bk.forEach((source) => sources_bk.push(source));            
+            res.source_bk.forEach((source) => sources_bk.push(source));
         }
 
         return {

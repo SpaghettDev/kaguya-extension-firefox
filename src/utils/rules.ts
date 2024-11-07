@@ -11,12 +11,12 @@ export const addRules = (
         // options as keys with their values being null,
         // this breaks the compareNestedObjects function
         const existRules = dynamicRules.map((rule) => { return removeNullValues(rule); });
-        
+
         const ruleIds = existRules.map((rule) => rule.id);
         const maxRuleId = Math.max(...ruleIds);
-        
+
         let currentRuleId = ruleIds?.length ? maxRuleId : 0;
-        
+
         // Combine newRules and existRules
         const allRules = [...newRules, ...existRules];
 

@@ -94,10 +94,8 @@ export default class AnimePahe extends AnimeSource {
     }
 
     async search(query: string): Promise<SearchResultType[]> {
-        const encodedQuery = encodeURIComponent(query);
-
         const response: PaheAPISearchResponse = await fetch(
-            `${this.url}/api?m=search&q=${encodedQuery}`
+            `${this.url}/api?m=search&q=${encodeURIComponent(query)}`
         ).then((res) => res.json());
 
         if (!response?.data?.length) return [];
@@ -197,7 +195,7 @@ export default class AnimePahe extends AnimeSource {
         const response = await fetch(videoServer.embed, {
             headers: { "Referer": "https://animepahe.ru/" }
         }).then((res) => res.text());
-        
+
         const packedString =
             "eval(function(p,a,c,k,e,d)" +
             parseBetween(
@@ -210,9 +208,9 @@ export default class AnimePahe extends AnimeSource {
         const stream = unpacked.match(/https.*?m3u8/g)?.[0];
 
         if (!stream) return null;
-        
+
         const video: VideoType = { file: { url: stream }};
-        
+
         const streamData = videoServer.name.match(
             /^(.+?)\s*·\s*(\d+p)\s*\(([\d.]+MB)\)(?: (\S+))?$/
         );

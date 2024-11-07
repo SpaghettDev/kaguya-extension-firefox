@@ -131,21 +131,22 @@ query ($type: MediaType, $search: String, $sort: [MediaSort] = [POPULARITY_DESC,
         return episodes;
 
     }
-    
+
     async loadVideoServers(episodeId: string, extra: Record<string, string>): Promise<VideoServerType[]> {
         const servers: VideoServerType[] = [];
-        
-        let watchUrl = `https://aniplaynow.live/anime/watch?id=${extra.animeId}&ep=${extra.epNum}&host=${extra.providerId}&type=sub`;
-    
-        const resp2 = await fetch(watchUrl, {
-            headers: {
-                "Content-Type": "application/json",
-                "Next-Action": HEADER_NEXT_ACTION_WATCH
-            },
-            body: `["${extra.animeId}", "${extra.providerId}", "${episodeId}", "${extra.epNum}", "sub"]`,
-            method: "POST"
-        });
-    
+
+        const resp2 = await fetch(
+            `https://aniplaynow.live/anime/watch?id=${extra.animeId}&ep=${extra.epNum}&host=${extra.providerId}&type=sub`,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Next-Action": HEADER_NEXT_ACTION_WATCH
+                },
+                body: `["${extra.animeId}", "${extra.providerId}", "${episodeId}", "${extra.epNum}", "sub"]`,
+                method: "POST"
+            }
+        );
+
         const resp2Text = await resp2.text();
         const sources: AniPlaySource[] = JSON.parse(resp2Text.split("1:")[1])["sources"]
 
