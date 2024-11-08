@@ -12,6 +12,7 @@ import {
     SudatchiStreamsResponse,
     SudathchiSearchResponse, 
 } from "@models/anime/sudatchi";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 
 export default class Sudatchi extends AnimeSource {
     constructor() {
@@ -109,7 +110,7 @@ export default class Sudatchi extends AnimeSource {
         }));
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const searchResults = await this.totalSearch(anilist);
 
         const searchResultWithSameId = searchResults.find(

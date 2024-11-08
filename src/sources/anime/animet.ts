@@ -4,6 +4,7 @@ import { SearchResultType } from "@src/core/SearchResult";
 import { VideoFormat } from "@src/core/Video";
 import VideoContainer, { VideoContainerType } from "@src/core/VideoContainer";
 import VideoServer, { VideoServerType } from "@src/core/VideoServer";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { DataWithExtra } from "@src/types/utils";
 import { Wise_EvalDecode } from "@src/unpackers/wise";
 import {
@@ -77,7 +78,7 @@ export default class AnimeT extends AnimeSource {
         ];
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const searchResults = await this.totalSearch(anilist);
 
         return {

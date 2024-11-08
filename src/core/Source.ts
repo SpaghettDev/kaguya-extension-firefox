@@ -1,3 +1,4 @@
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { SearchResultType } from "./SearchResult";
 
 export type SourceProps = {
@@ -27,12 +28,12 @@ export default class Source implements SourceProps {
         this.url = url;
     }
 
-    async search(query: string, anilist: any): Promise<SearchResultType[]> {
+    async search(query: string, anilist: AnilistSearchResponse): Promise<SearchResultType[]> {
         throw new Error("Method not implemented.");
     }
 
     async totalSearch(
-        anilist: any,
+        anilist: AnilistSearchResponse,
         query?: string
     ): Promise<SearchResultType[]> {
         if (query) {
@@ -40,7 +41,7 @@ export default class Source implements SourceProps {
         }
 
         const titles = [
-            ...new Set([anilist?.title?.english, anilist?.title?.romaji]),
+            ...new Set([anilist?.title?.english, anilist?.title?.romanji]),
         ];
 
         if (!titles?.length) return [];

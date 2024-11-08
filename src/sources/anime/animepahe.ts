@@ -11,6 +11,8 @@ import {
     PaheAPISearchResponse, PaheAPIReleaseResponse,
     PaheApiReleaseEpisode,
 } from "@models/anime/animepahe";
+import { AnilistSearchResponse } from "@src/models/Anilist";
+import { addRules } from "@src/utils/rules";
 
 export default class AnimePahe extends AnimeSource {
     constructor() {
@@ -111,7 +113,7 @@ export default class AnimePahe extends AnimeSource {
         return searchResults;
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const searchResults = await this.totalSearch(anilist);
 
         return {
@@ -220,6 +222,35 @@ export default class AnimePahe extends AnimeSource {
             video.format = VideoFormat.CONTAINER;
             video.quality = res;
         }
+
+        await addRules([{
+            priority: 1,
+            action: {
+                type: "modifyHeaders",
+                requestHeaders: [
+                    {
+                        header: "Referer",
+                        operation: "set",
+                        value: new URL(stream).origin,
+                    },
+                ],
+                responseHeaders: [
+                    {
+                        header: "Access-Control-Allow-Origin",
+                        operation: "set",
+                        value: "*",
+                    },
+                    {
+                        header: "Access-Control-Allow-Methods",
+                        operation: "set",
+                        value: "PUT, GET, HEAD, POST, DELETE, OPTIONS",
+                    },
+                ],
+            },
+            condition: {
+                requestDomains: [new URL(stream).hostname],
+            }
+        }]);
 
         return VideoContainer({
             videos: [video]

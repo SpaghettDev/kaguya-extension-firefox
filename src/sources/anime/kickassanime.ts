@@ -5,6 +5,7 @@ import SearchResult, { SearchResultType } from "@src/core/SearchResult";
 import { VideoFormat } from "@src/core/Video";
 import { VideoContainerType } from "@src/core/VideoContainer";
 import VideoServer, { VideoServerType } from "@src/core/VideoServer";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { DataWithExtra } from "@src/types/utils";
 import { isFulfilled } from "@src/utils";
 import CryptoJS from "crypto-js";
@@ -77,7 +78,7 @@ export default class KickAssAnime extends AnimeSource {
         return searchResults;
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const data = await this.totalSearch(anilist);
 
         return {

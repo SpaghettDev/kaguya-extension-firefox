@@ -3,6 +3,7 @@ import { EpisodeType } from "./Episode";
 import Source, { SourceProps } from "./Source";
 import { VideoContainerType } from "./VideoContainer";
 import { VideoServerType } from "./VideoServer";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 
 export interface AnimeSourceProps extends SourceProps {
     quality?: string[];
@@ -24,7 +25,6 @@ export default class AnimeSource extends Source {
         this.isHardsubbed = props.isHardsubbed ?? true;
     }
 
-    //TODO: Add anilist media type
     /**
      * Retrieves the anime id based on the provided Anilist data.
      *
@@ -33,7 +33,7 @@ export default class AnimeSource extends Source {
      * The anime id can be obtained by using the source's search function or by using any existing mapping.
      *
      */
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         throw new Error("Method not implemented.");
     }
 

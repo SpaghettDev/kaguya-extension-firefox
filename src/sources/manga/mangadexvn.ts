@@ -3,6 +3,7 @@ import { EpisodeType } from "@src/core/Episode";
 import { FileUrlType } from "@src/core/FileUrl";
 import MangaSource from "@src/core/MangaSource";
 import { SearchResultType } from "@src/core/SearchResult";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { DataWithExtra } from "@src/types/utils";
 
 declare module MangaDexResponse {
@@ -168,7 +169,7 @@ export default class MangaDexVN extends MangaSource {
         });
     }
 
-    async getMangaId(anilist: any): Promise<DataWithExtra<string>> {
+    async getMangaId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const response = await fetch(
             `https://raw.githubusercontent.com/bal-mackup/mal-backup/master/anilist/manga/${anilist.id}.json`
         );

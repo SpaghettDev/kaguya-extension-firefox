@@ -6,6 +6,7 @@ import Video, { VideoFormat, VideoType } from "@src/core/Video";
 import VideoContainer, { VideoContainerType } from "@src/core/VideoContainer";
 import VideoServer, { VideoServerType } from "@src/core/VideoServer";
 import gogoExtractor from "@src/extractors/gogo";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { DataWithExtra } from "@src/types/utils";
 import { parseNumberFromString } from "@src/utils";
 import { load } from "cheerio";
@@ -60,7 +61,7 @@ export default class Gogo extends AnimeSource {
         return searchResults;
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const response = await fetch(
             `https://raw.githubusercontent.com/bal-mackup/mal-backup/master/anilist/anime/${anilist.id}.json`
         );

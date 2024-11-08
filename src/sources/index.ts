@@ -2,20 +2,12 @@ import AnimeT from "./anime/animet";
 import AnimeTVN from "./anime/animetvn";
 import AnimeVietSub from "./anime/animevietsub";
 import Gogo from "./anime/gogo";
-import BlogTruyen from "./manga/blogtruyen";
 import Bilibili from "./anime/bilibili";
 import Anime47 from "./anime/anime47";
 import AnimeHay from "./anime/animehay";
-
-import MangaDex from "./manga/mangadex";
-import NetTruyen from "./manga/nettruyen";
-import MangaDexVN from "./manga/mangadexvn";
-import BlogTruyenMoi from "./manga/blogtruyenmoi";
 import KickAssAnime from "./anime/kickassanime";
 import Zoro from "./anime/zoro";
-import MangaKatana from "./manga/mangakatana";
 import VuiGhe from "./anime/vuighe";
-import Bato from "./manga/bato";
 import AniWave from "./anime/aniwave";
 import AnimePahe from "./anime/animepahe";
 import Crunchyroll from "./anime/crunchyroll";
@@ -23,6 +15,14 @@ import Aniplay from "./anime/aniplay";
 import HHHay from "./anime/hhhay";
 import Sudatchi from "./anime/sudatchi";
 import OPhim from "./anime/ophim";
+
+import MangaDex from "./manga/mangadex";
+import NetTruyen from "./manga/nettruyen";
+import MangaDexVN from "./manga/mangadexvn";
+import BlogTruyenMoi from "./manga/blogtruyenmoi";
+import Bato from "./manga/bato";
+import MangaKatana from "./manga/mangakatana";
+import BlogTruyen from "./manga/blogtruyen";
 
 export const anime = {
     // anime47: new Anime47(),

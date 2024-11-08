@@ -2,6 +2,7 @@ import Chapter, { ChapterType } from "@src/core/Chapter";
 import { FileUrlType } from "@src/core/FileUrl";
 import MangaSource from "@src/core/MangaSource";
 import SearchResult, { SearchResultType } from "@src/core/SearchResult";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { DataWithExtra } from "@src/types/utils";
 import { parseBetween, parseNumberFromString } from "@src/utils";
 import { evalScript } from "@src/utils/eval";
@@ -20,7 +21,7 @@ export default class Bato extends MangaSource {
         });
     }
 
-    async getMangaId(anilist: any): Promise<DataWithExtra<string>> {
+    async getMangaId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const searchResults = await this.totalSearch(anilist);
 
         return {

@@ -4,6 +4,7 @@ import { SearchResultType } from "@src/core/SearchResult";
 import Subtitle, { SubtitleType } from "@src/core/Subtitle";
 import VideoContainer, { VideoContainerType } from "@src/core/VideoContainer";
 import { VideoServerType } from "@src/core/VideoServer";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { DataWithExtra } from "@src/types/utils";
 
 class CrunchyrollClient {
@@ -418,7 +419,7 @@ export default class Crunchyroll extends AnimeSource {
         ];
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const searchResults = await this.totalSearch(anilist);
 
         return {

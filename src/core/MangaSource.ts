@@ -2,9 +2,9 @@ import { DataWithExtra } from "@src/types/utils";
 import { ChapterType } from "./Chapter";
 import { FileUrlType } from "./FileUrl";
 import Source from "./Source";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 
 export default class MangaSource extends Source {
-    //TODO: Add anilist media type
     /**
      * Retrieves the manga id based on the provided Anilist data.
      *
@@ -13,7 +13,7 @@ export default class MangaSource extends Source {
      * The manga id can be obtained by using the source's search function or by using any existing mapping.
      *
      */
-    async getMangaId(anilist: any): Promise<DataWithExtra<string>> {
+    async getMangaId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         throw new Error("Method not implemented.");
     }
 

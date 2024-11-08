@@ -4,6 +4,7 @@ import { FileUrlType } from "@src/core/FileUrl";
 import { SearchResultType } from "@src/core/SearchResult";
 import { VideoContainerType } from "@src/core/VideoContainer";
 import { VideoServerType } from "@src/core/VideoServer";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { anime, manga } from "@src/sources";
 import { EventType } from "@src/types/events";
 import { DataWithExtra } from "@src/types/utils";
@@ -26,12 +27,12 @@ export type ListenersMap = {
     >;
 
     "search-anime": ListenerWithReturn<
-        { sourceId: string; anilist: any; query?: string },
+        { sourceId: string; anilist: AnilistSearchResponse; query?: string },
         SearchResultType[]
     >;
 
     "search-manga": ListenerWithReturn<
-        { sourceId: string; anilist: any; query?: string },
+        { sourceId: string; anilist: AnilistSearchResponse; query?: string },
         SearchResultType[]
     >;
 
@@ -55,7 +56,7 @@ export type ListenersMap = {
 
     "get-anime-id": ListenerWithReturn<
         {
-            anilist: any;
+            anilist: AnilistSearchResponse;
             sourceId: AnimeSourceId;
         },
         DataWithExtra<string>
@@ -63,7 +64,7 @@ export type ListenersMap = {
 
     "get-manga-id": ListenerWithReturn<
         {
-            anilist: any;
+            anilist: AnilistSearchResponse;
             sourceId: MangaSourceId;
         },
         DataWithExtra<string>

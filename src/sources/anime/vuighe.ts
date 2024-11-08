@@ -4,6 +4,7 @@ import SearchResult, { SearchResultType } from "@src/core/SearchResult";
 import { SubtitleType } from "@src/core/Subtitle";
 import VideoContainer, { VideoContainerType } from "@src/core/VideoContainer";
 import { VideoServerType } from "@src/core/VideoServer";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { DataWithExtra } from "@src/types/utils";
 import { parseNumberFromString } from "@src/utils";
 import { load } from "cheerio";
@@ -91,7 +92,7 @@ export default class VuiGhe extends AnimeSource {
         console.log(`(.*)${new URL(this.url).host}(.*)`);
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const searchResults = await this.totalSearch(anilist);
 
         return {

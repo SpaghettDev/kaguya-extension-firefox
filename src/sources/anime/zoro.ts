@@ -19,6 +19,7 @@ import {
     ZoroSearchResponse,
     ZoroSearchResult
 } from "@models/anime/zoro";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 
 const ZoroServerNames = {
     4: "vidstreaming",
@@ -77,7 +78,7 @@ export default class Zoro extends AnimeSource {
         } as SearchResultType));
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const searchResults = await this.totalSearch(anilist);
 
         return {

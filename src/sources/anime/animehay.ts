@@ -6,6 +6,7 @@ import { parseNumberFromString } from "@src/utils";
 import { VideoServerType } from "@src/core/VideoServer";
 import VideoContainer, { VideoContainerType } from "@src/core/VideoContainer";
 import { SearchResultType } from "@src/core/SearchResult";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 
 export default class AnimeHay extends AnimeSource {
     baseURL: string;
@@ -139,7 +140,7 @@ export default class AnimeHay extends AnimeSource {
         this.hasGotBaseURL = true;
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         await this.getBaseURL();
 
         const searchResults = await this.totalSearch(anilist);

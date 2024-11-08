@@ -2,6 +2,7 @@ import Chapter, { ChapterType } from "@src/core/Chapter";
 import FileUrl, { FileUrlType } from "@src/core/FileUrl";
 import MangaSource from "@src/core/MangaSource";
 import { SearchResultType } from "@src/core/SearchResult";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { DataWithExtra } from "@src/types/utils";
 import { parseNumberFromString } from "@src/utils";
 import { load } from "cheerio";
@@ -37,7 +38,7 @@ export default class BlogTruyen extends MangaSource {
         ];
     }
 
-    async getMangaId(anilist: any): Promise<DataWithExtra<string>> {
+    async getMangaId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const search = async (title: string) => {
             const response = await fetch(
                 "https://blogtruyen.vn/ajax/Search/AjaxQuickSearch",

@@ -1,4 +1,5 @@
-type AniPlayQualityType = "360p"
+type AniPlayQualityType =
+    | "360p"
     | "480p"
     | "720p"
     | "1080p"
@@ -19,7 +20,8 @@ interface AniPlayEpisode {
 interface AniPlayInfoProvider {
     episodes: AniPlayEpisode[];
     providerId: string;
-    default?: boolean;
+    default?: true;
+    dub?: boolean;
 };
 
 interface AniPlaySource {
@@ -28,7 +30,23 @@ interface AniPlaySource {
     quality: AniPlayQualityType;
 };
 
+interface AniPlayTimestamp {
+    startTime: number;
+    endTime: number;
+    text: string;
+};
+
+interface AniPlayWatchResponse {
+    headers: {
+        [x: string]: string;
+    };
+    sources: AniPlaySource[];
+    download: string;
+    skiptimes: AniPlayTimestamp[];
+};
 
 export {
-    AniPlayInfoProvider, AniPlaySource
+    AniPlayWatchResponse,
+    AniPlayInfoProvider, AniPlaySource,
+    AniPlayTimestamp
 };

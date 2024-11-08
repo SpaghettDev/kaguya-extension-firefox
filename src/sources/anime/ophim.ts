@@ -3,6 +3,7 @@ import { EpisodeType } from "@src/core/Episode";
 import { SearchResultType } from "@src/core/SearchResult";
 import VideoContainer, { VideoContainerType } from "@src/core/VideoContainer";
 import { VideoServerType } from "@src/core/VideoServer";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { DataWithExtra } from "@src/types/utils";
 import { parseBetween } from "@src/utils";
 
@@ -19,7 +20,7 @@ export default class OPhim extends AnimeSource {
         });
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         const searchResults = await this.totalSearch(anilist);
 
         return {

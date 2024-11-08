@@ -4,6 +4,7 @@ import { SearchResultType } from "@src/core/SearchResult";
 import { VideoFormat } from "@src/core/Video";
 import { VideoContainerType } from "@src/core/VideoContainer";
 import { VideoServerType } from "@src/core/VideoServer";
+import { AnilistSearchResponse } from "@src/models/Anilist";
 import { DataWithExtra } from "@src/types/utils";
 import packedDecode from "@src/unpackers/packed";
 import { parseBetween, parseNumberFromString } from "@src/utils";
@@ -75,7 +76,7 @@ export default class HHHay extends AnimeSource {
         this.hasGotBaseURL = true;
     }
 
-    async getAnimeId(anilist: any): Promise<DataWithExtra<string>> {
+    async getAnimeId(anilist: AnilistSearchResponse): Promise<DataWithExtra<string>> {
         await this.getBaseURL();
 
         const searchResults = await this.totalSearch(anilist);
