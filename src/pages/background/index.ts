@@ -296,19 +296,22 @@ const initializeListeners = () => {
 };
 
 const registerMessageIntermediate = () => {
-    const targetJSURL = "https://kaguya.app/_next/static/chunks/547-e48cce8e6a7eeb96.js";
+    const targetJSURLs = [
+        "https://kaguya.app/_next/static/chunks/547-e48cce8e6a7eeb96.js",
+        "https://kaguya.app/_next/static/chunks/pages/anime/watch/[...params]-c6b07e371c50d241.js"
+    ].map((v) => encodeURI(v));
 
     browser.webRequest.onBeforeRequest.addListener(
         (details) => {
-            if (details.url === targetJSURL) {
-                console.log(`Overwriting website js (${details.url})`);
+            console.log(`Overwriting website js (${details.url})`);
 
-                return {
-                    redirectUrl: browser.runtime.getURL("website-overrides/547-e48cce8e6a7eeb96.js")
-                };
-            }
+            return {
+                redirectUrl: browser.runtime.getURL(
+                    `website-overrides/${decodeURIComponent(details.url.split("/").at(-1))}`
+                ),
+            };
         }, {
-            urls: [targetJSURL],
+            urls: targetJSURLs,
             types: ["script"]
         }, ["blocking"]
     );

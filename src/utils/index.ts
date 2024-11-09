@@ -129,7 +129,11 @@ export function removeNullValues<T>(obj: Not<Array<unknown>, T>): T {
     return Object.entries(obj).reduce((acc, [key, value]) => {
         if (value !== null && value !== undefined) {
             if (Array.isArray(value)) {
-                acc[key] = [...value]
+                acc[key] = value.filter(
+                    (v) => v !== null && v !== undefined
+                ).map(
+                    (v) => typeof v === "object" ? removeNullValues(v) : v
+                );
             } else {
                 acc[key] = typeof value === "object" ? removeNullValues(value) : value;
             }

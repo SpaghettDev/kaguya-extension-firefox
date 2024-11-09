@@ -1,5 +1,4 @@
-type AniPlayQualityType =
-    | "360p"
+type AniPlayQualityType = "360p"
     | "480p"
     | "720p"
     | "1080p"

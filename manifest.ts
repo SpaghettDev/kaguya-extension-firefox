@@ -44,6 +44,7 @@ const manifest: browser._manifest.WebExtensionManifest = {
     devtools_page: "src/pages/devtools/index.html",
     web_accessible_resources: [
         "website-overrides/547-e48cce8e6a7eeb96.js",
+        "website-overrides/[...params]-c6b07e371c50d241.js",
         "assets/js/*.js",
         "assets/css/*.css",
         "icon16.png",

@@ -32,7 +32,7 @@ export const anime = {
     tvn: new AnimeTVN(),
     ah: new AnimeHay(),
     // bilibili: new Bilibili(),
-    // kickassanime: new KickAssAnime(),
+    kickassanime: new KickAssAnime(),
     zoro: new Zoro(),
     // vuighe: new VuiGhe(),
     // aniwave: new AniWave(),
