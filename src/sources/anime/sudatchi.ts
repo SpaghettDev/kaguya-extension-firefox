@@ -232,16 +232,12 @@ export default class Sudatchi extends AnimeSource {
             const subtitleUrl = await this.getSubtitleUrl();
 
             container.subtitles = subtitles.map((sub) => {
-                let url = "";
-
-                if (sub.url.startsWith("/subtitles")) {
-                    url = `https://sudatchi.com${sub.url}`;
-                } else {
-                    url = `${subtitleUrl}${sub.url}`;
-                }
-
                 return {
-                    file: { url },
+                    file: {
+                        url: `${
+                            sub.url.startsWith("/subtitles") ? this.url : subtitleUrl
+                        }${sub.url}`,
+                    },
                     language: sub.SubtitlesName.name,
                     format: SubtitleFormat.ASS,
                 };
@@ -263,16 +259,61 @@ export default class Sudatchi extends AnimeSource {
             ];
         }
 
+        // jassub skill issue :(
         if (fonts?.length) {
-          container.fonts = fonts.map((font) => {
-            const fontName = font.split("/").at(-1).split(".")[0];
+            // container.fonts = fonts.map((font) => {
+            //     const fontName = font.split("/").at(-1).split(".")[0];
 
-            return {
-                file: { url: `${this.url}${font}` },
-                name: fontName,
-            };
-          });
+            //     return {
+            //         file: { url: `${this.url}${font}` },
+            //         name: fontName,
+            //     };
+            // });
         }
+        container.fonts = [
+            {
+                file: {
+                    url: `https://github.com/justrajdeep/fonts/raw/master/Arial.ttf`,
+                },
+                name: "Arial",
+            },
+            {
+                file: {
+                    url: `https://github.com/justrajdeep/fonts/raw/master/Arial%20Bold.ttf`,
+                },
+                name: "Arial",
+            },
+            {
+                file: {
+                    url: "https://github.com/justrajdeep/fonts/raw/master/Times%20New%20Roman.ttf",
+                },
+                name: "Times New Roman",
+            },
+            {
+                file: {
+                    url: "https://github.com/justrajdeep/fonts/raw/master/Trebuchet%20MS.ttf",
+                },
+                name: "Trebuchet MS",
+            },
+            {
+                file: {
+                    url: "https://github.com/justrajdeep/fonts/raw/master/Tahoma.ttf",
+                },
+                name: "Tahoma",
+            },
+            {
+                file: {
+                    url: "https://github.com/hoangvu12/kaguya-fonts/raw/master/AdobeArabic-Regular.ttf",
+                },
+                name: "Adobe Arabic",
+            },
+            {
+                file: {
+                    url: "https://github.com/hoangvu12/kaguya-fonts/raw/master/Swiss%20721%20BT.ttf",
+                },
+                name: "Swis721 BT",
+            },
+        ];
 
         return container;
     }

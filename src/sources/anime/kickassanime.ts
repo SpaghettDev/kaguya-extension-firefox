@@ -189,6 +189,7 @@ export default class KickAssAnime extends AnimeSource {
 
                 $("MPD Period AdaptationSet Representation").each((_, el) => {
                     const mimeType = $(el).attr("mimeType");
+                    const codec = $(el).attr("codecs").split(".")[0];
                     const width = Number($(el).attr("width"));
                     const height = Number($(el).attr("height"));
 
@@ -198,7 +199,7 @@ export default class KickAssAnime extends AnimeSource {
                         case "video/mp4":
                             videoContainer.videos.push({
                                 file: { url: link },
-                                quality: this.getVideoResolution(width, height),
+                                quality: `${this.getVideoResolution(width, height)} - ${codec}`,
                                 format: VideoFormat.DASH,
                             });
                         break;
@@ -308,36 +309,35 @@ export default class KickAssAnime extends AnimeSource {
                 }
             }
 
-            // why dont the requestHeaders get applied ffs i will literally kms
-            await addRules(
-                videoContainer.videos.map((video) => {
+            await addRules([
+                ...videoContainer.videos.map((video) => {
                     const videoURL = new URL(video.file.url);
 
                     return {
                         priority: 1,
                         action: {
-                            type: "modifyHeaders",
+                            type: "modifyHeaders" as const,
                             requestHeaders: [
                                 {
                                     header: "Origin",
-                                    operation: "set",
+                                    operation: "set" as const,
                                     value: videoURL.origin,
                                 },
                                 {
                                     header: "Referer",
-                                    operation: "set",
+                                    operation: "set" as const,
                                     value: videoURL.origin,
                                 },
                             ],
                             responseHeaders: [
                                 {
                                     header: "Access-Control-Allow-Origin",
-                                    operation: "set",
+                                    operation: "set" as const,
                                     value: "*",
                                 },
                                 {
-                                    header: "Access-Control-Allow-Methods",
-                                    operation: "set",
+                                    header: "Access- as constControl-Allow-Methods",
+                                    operation: "set" as const,
                                     value: "PUT, GET, HEAD, POST, DELETE, OPTIONS",
                                 },
                             ],
@@ -346,8 +346,45 @@ export default class KickAssAnime extends AnimeSource {
                             requestDomains: [videoURL.hostname],
                         }
                     }
-                })
-            );
+                }),
+                ...videoContainer.subtitles.map((subtitle) => {
+                    const subtitleURL = new URL(subtitle.file.url);
+
+                    return {
+                        priority: 1,
+                        action: {
+                            type: "modifyHeaders" as const,
+                            requestHeaders: [
+                                {
+                                    header: "Origin",
+                                    operation: "set" as const,
+                                    value: subtitleURL.origin,
+                                },
+                                {
+                                    header: "Referer",
+                                    operation: "set" as const,
+                                    value: subtitleURL.origin,
+                                }
+                            ],
+                            responseHeaders: [
+                                {
+                                    header: "Access-Control-Allow-Origin",
+                                    operation: "set" as const,
+                                    value: "*",
+                                },
+                                {
+                                    header: "Access-Control-Allow-Methods",
+                                    operation: "set" as const,
+                                    value: "PUT, GET, HEAD, POST, DELETE, OPTIONS",
+                                },
+                            ]
+                        },
+                        condition: {
+                            requestDomains: [subtitleURL.hostname]
+                        }
+                    }
+                }),
+            ]);
 
             return videoContainer;
         } catch (err) {
