@@ -1,13 +1,13 @@
 import AnimeSource from "@src/core/AnimeSource";
 import { EpisodeType } from "@src/core/Episode";
-import SearchResult, { SearchResultType } from "@src/core/SearchResult";
+import { SearchResultType } from "@src/core/SearchResult";
 import { VideoFormat } from "@src/core/Video";
 import { VideoContainerType } from "@src/core/VideoContainer";
 import { VideoServerType } from "@src/core/VideoServer";
 import { DataWithExtra } from "@src/types/utils";
 import {
     AniPlayWatchResponse,
-    AniPlayInfoProvider, AniPlayTimestamp
+    AniPlayInfoProvider,
 } from "@models/anime/aniplay";
 import { TimestampType } from "@src/core/Timestamp";
 import { AnilistSearchResponse } from "@src/models/Anilist";
@@ -23,7 +23,7 @@ export default class Aniplay extends AnimeSource {
             languages: ["English"],
             isNSFW: false,
             url: "https://aniplaynow.live",
-            quality: ["1080p", "720p", "360p", "420p"],
+            quality: ["1080p", "720p", "420p", "360p"],
             logo: "https://aniplaynow.live/favicon-16x16.png",
         });
 

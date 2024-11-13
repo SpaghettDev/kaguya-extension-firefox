@@ -15,6 +15,7 @@ import Aniplay from "./anime/aniplay";
 import HHHay from "./anime/hhhay";
 import Sudatchi from "./anime/sudatchi";
 import OPhim from "./anime/ophim";
+import AllAnime from "./anime/allanime";
 
 import MangaDex from "./manga/mangadex";
 import NetTruyen from "./manga/nettruyen";
@@ -27,6 +28,7 @@ import BlogTruyen from "./manga/blogtruyen";
 export const anime = {
     // anime47: new Anime47(),
     // animet: new AnimeT(),
+    allanime: new AllAnime(),
     gogo: new Gogo(),
     // avs: new AnimeVietSub(),
     tvn: new AnimeTVN(),

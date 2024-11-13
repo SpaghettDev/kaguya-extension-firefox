@@ -2,7 +2,7 @@ import { CheerioAPI, load } from "cheerio";
 import CryptoJS from "crypto-js";
 
 // Thanks https://github.com/riimuru for gogoanime's extraction code :)
-const USER_AGENT =
+export const GOGO_USER_AGENT =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36";
 export const BASE_URL = "https://anitaku.to";
 export const GOLOAD_STREAM_URL = "https://playtaku.online/streaming.php";
@@ -13,7 +13,7 @@ const keys = {
     iv: CryptoJS.enc.Utf8.parse("3134003223491201"),
 };
 
-function decryptEncryptAjaxResponse(obj: { data: string }) {
+export function decryptEncryptAjaxResponse(obj: { data: string }) {
     const decrypted = CryptoJS.enc.Utf8.stringify(
         CryptoJS.AES.decrypt(obj.data, keys.second_key, {
             iv: keys.iv,
@@ -23,7 +23,7 @@ function decryptEncryptAjaxResponse(obj: { data: string }) {
     return JSON.parse(decrypted);
 }
 
-async function generateEncryptAjaxParameters($: CheerioAPI, id: string) {
+export async function generateEncryptAjaxParameters($: CheerioAPI, id: string) {
     // encrypt the key
     const encrypted_key = CryptoJS.AES["encrypt"](id, keys.key, {
         iv: keys.iv,
@@ -37,7 +37,7 @@ async function generateEncryptAjaxParameters($: CheerioAPI, id: string) {
     return "id=" + encrypted_key + "&alias=" + id + "&" + token;
 }
 
-type Source = {
+export type Source = {
     file: string;
     label: string;
     type: string;
@@ -62,7 +62,7 @@ const gogoExtractor = async (id: string) => {
         } else serverUrl = new URL(`${GOLOAD_STREAM_URL}?id=${id}`);
 
         const goGoServerPageResponse = await fetch(serverUrl.href, {
-            headers: { "User-Agent": USER_AGENT },
+            headers: { "User-Agent": GOGO_USER_AGENT },
         });
         const goGoServerPage = await goGoServerPageResponse.text();
 
@@ -78,11 +78,10 @@ const gogoExtractor = async (id: string) => {
             );
 
             const fetchResponse = await fetch(
-                `
-                ${serverUrl.protocol}//${serverUrl.hostname}/encrypt-ajax.php?${params}`,
+                `${serverUrl.protocol}//${serverUrl.hostname}/encrypt-ajax.php?${params}`,
                 {
                     headers: {
-                        "User-Agent": USER_AGENT,
+                        "User-Agent": GOGO_USER_AGENT,
                         "X-Requested-With": "XMLHttpRequest",
                     },
                 }
