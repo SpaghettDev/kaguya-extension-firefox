@@ -14,10 +14,12 @@ import { AnilistSearchResponse } from "@src/models/Anilist";
 import {
     decryptAllAnime,
     extractAllAnime, extractAllAnimeGogo,
+} from "@src/extractors/allanime";
+import {
     extractDoodstream, extractFilemoon,
     extractMP4Upload, extractOkRU,
     extractStreamwish,
-} from "@src/extractors/allanime";
+} from "@src/extractors/common";
 import { addRules } from "@src/utils/rules";
 
 export default class AllAnime extends AnimeSource {
@@ -228,11 +230,11 @@ export default class AllAnime extends AnimeSource {
                     priority: 1,
                     action: {
                         type: "modifyHeaders",
-                        requestHeaders: Object.entries(v.file.headers).map((h) => {
+                        requestHeaders: Object.entries(v.file.headers).map(([name, value]) => {
                             return {
-                                header: h[0],
+                                header: name,
                                 operation: "set",
-                                value: h[1],
+                                value: value,
                             };
                         }),
                         responseHeaders: [

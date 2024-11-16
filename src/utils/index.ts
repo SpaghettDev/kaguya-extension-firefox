@@ -1,7 +1,7 @@
 type Not<T, R> = R extends T ? never : R;
 
-export const parseBetween = (str: string, start: string, end: string) => {
-    let strArr = [];
+export const parseBetween = (str: string, start: string, end: string): string | never => {
+    let strArr: string[] = [];
 
     strArr = str.split(start);
     strArr = strArr[1].split(end);
@@ -59,10 +59,10 @@ export function getDomainFromUrl(url: string): string | null {
 }
 
 // https://stackoverflow.com/questions/5457416/how-to-validate-numeric-values-which-may-contain-dots-or-commas
-export const parseNumbersFromString = (
+export const parseNumbersFromString = <T = null>(
     text: string,
-    fallbackNumber = null
-): number[] => {
+    fallbackNumber: T = null
+): number[] | T[] => {
     const matches = text.match(/\d+([\.,][\d{1,2}])?/g);
 
     if (!matches) return [fallbackNumber];
@@ -70,8 +70,10 @@ export const parseNumbersFromString = (
     return matches.map(Number);
 };
 
-export const parseNumberFromString = (text: string, fallbackNumber = null) => {
-    return parseNumbersFromString(text, fallbackNumber)[0];
+type FallbackOrNull<Fallback, Default, Normal> = [Fallback] extends [Default] ? (Default | Normal) : (Fallback | Normal);
+
+export const parseNumberFromString = <Fallback = null>(text: string, fallbackNumber: Fallback = null): FallbackOrNull<Fallback, null, number>  => {
+    return parseNumbersFromString<Fallback>(text, fallbackNumber)[0] as FallbackOrNull<Fallback, null, number>;
 };
 
 type ComparisonFunction<T> = (a: T, b: T) => boolean;

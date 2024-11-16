@@ -25,9 +25,8 @@ export default class AnimePahe extends AnimeSource {
             url: "https://animepahe.ru",
             quality: ["1080p", "720p"],
             logo: "https://animepahe.ru/app/images/apdoesnthavelogotheysaidapistooplaintheysaid.svg",
+            isHardsubbed: false,
         });
-
-        this.isHardsubbed = false;
 
         this.rules = [
             {

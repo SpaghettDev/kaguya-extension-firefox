@@ -16,6 +16,7 @@ import HHHay from "./anime/hhhay";
 import Sudatchi from "./anime/sudatchi";
 import OPhim from "./anime/ophim";
 import AllAnime from "./anime/allanime";
+import Anivibe from "./anime/anivibe";
 
 import MangaDex from "./manga/mangadex";
 import NetTruyen from "./manga/nettruyen";
@@ -29,6 +30,7 @@ export const anime = {
     // anime47: new Anime47(),
     // animet: new AnimeT(),
     allanime: new AllAnime(),
+    anivibe: new Anivibe(),
     gogo: new Gogo(),
     // avs: new AnimeVietSub(),
     tvn: new AnimeTVN(),

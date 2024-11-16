@@ -49,7 +49,7 @@ export default class Source implements SourceProps {
         for (const title of titles) {
             try {
                 const searchResults = await this.search(
-                    title as string,
+                    title,
                     anilist
                 );
 

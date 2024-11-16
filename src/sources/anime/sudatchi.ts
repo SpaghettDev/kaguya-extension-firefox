@@ -60,8 +60,6 @@ export default class Sudatchi extends AnimeSource {
                 },
                 condition: {
                     regexFilter: "https://sudatchi.com/",
-                    requestMethods: ["get"],
-                    resourceTypes: ["xmlhttprequest"],
                 },
             },
             {
